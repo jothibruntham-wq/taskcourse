@@ -1,482 +1,323 @@
-
-import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "../assets/style/style.css";
+import {
+  FaLeaf, FaSearch, FaUsers, FaGraduationCap, FaCertificate, FaHandshake,
+  FaStar, FaChevronRight, FaChevronLeft, FaVideo, FaChartBar, FaBriefcase,
+  FaDesktop, FaPencilAlt, FaHeart, FaFacebookF, FaInstagram, FaLinkedinIn,
+  FaYoutube, FaPinterestP,
+} from "react-icons/fa";
+
+
+import digital from "../assets/images/digital.jpg";
+import ux from "../assets/images/ux.jpg";
+import html from "../assets/images/html.png";
+import design from "../assets/images/design.webp";
+import cars1 from "../assets/images/cars1.jpg";
+
+
+/* Replace the picsum / pravatar links with your own images (src/assets) */
+const img = (seed, w = 400, h = 260) => `https://picsum.photos/seed/${seed}/${w}/${h}`;
+const face = (n) => `https://i.pravatar.cc/200?img=${n}`;
+
+const navLinks = ["Categories", "Courses", "Mentors", "Stories", "Contact"];
+
+const stats = [
+  { icon: <FaUsers />, num: "15K+", label: "Learners" },
+  { icon: <FaGraduationCap />, num: "10+", label: "Years Teaching" },
+  { icon: <FaCertificate />, num: "420+", label: "Certificates" },
+  { icon: <FaHandshake />, num: "60+", label: "Partners" },
+];
+
+const courses = [
+  { title: "Digital Marketing", desc: "Grow brands in the digital world.", rating: 4.8, reviews: "2,341", price: 19, old: 49, tag: "BEST SELLER", img: digital },
+  { title: "UX Strategy", desc: "Design better digital experiences.", rating: 4.7, reviews: "1,982", price: 16, old: 39, img: ux },
+  { title: "HTML Basics", desc: "Build websites from scratch.", rating: 4.8, reviews: "2,118", price: 14, old: 29, img: html },
+  { title: "Product Design", desc: "Turn ideas into real products.", rating: 4.6, reviews: "1,765", price: 18, old: 45, tag: "POPULAR", img: design },
+];
+
+const features = [
+  { icon: <FaUsers />, color: "teal", title: "Expert Mentors", text: "Learn from industry professionals" },
+  { icon: <FaVideo />, color: "coral", title: "Live Classes", text: "Interactive and engaging sessions" },
+  { icon: <FaChartBar />, color: "teal", title: "Active Learners", text: "A global community of 500K+" },
+];
+
+const categories = [
+  { icon: <FaBriefcase />, name: "Business", text: "Build your career", color: "teal" },
+  { icon: <FaDesktop />, name: "Technology", text: "Stay ahead", color: "coral" },
+  { icon: <FaPencilAlt />, name: "Creative", text: "Express your ideas", color: "yellow" },
+  { icon: <FaHeart />, name: "Lifestyle", text: "Live a better you", color: "mint" },
+];
+
+const mentors = [
+  { name: "Daniel Carter", role: "Digital Marketing", rating: 4.9, count: 892, img: digital, bg: "teal" },
+  { name: "Sophia Nguyen", role: "UX Design", rating: 4.8, count: 764, img: face(47), bg: "mint" },
+  { name: "Marcus Lee", role: "Web Development", rating: 4.9, count: "1,021", img: face(15), bg: "yellow" },
+  { name: "Emma Wilson", role: "Product Design", rating: 4.7, count: 688, img: face(44), bg: "pink" },
+];
+
+const stories = [
+  { quote: "The course was well structured and super easy to follow. I gained real skills and landed a new job within 3 months!", name: "Alyssa Chen", role: "Marketing Specialist", img: face(32), color: "yellow" },
+  { quote: "Amazing content, supportive mentors and a great community. Learnora made learning fun and practical!", name: "James Miller", role: "Software Engineer", img: face(53), color: "mint" },
+];
+
+const guides = [
+  { title: "10 Habits for Lifelong Learning", text: "Build a growth mindset for a brighter future.", date: "Jan 12, 2024", read: "6 min read", img: img("guide1", 500, 260) },
+  { title: "How to Choose the Right Career Path", text: "Key questions to help you decide.", date: "Feb 3, 2024", read: "5 min read", img: img("guide2", 500, 260) },
+  { title: "Turn Your Passion Into a Career", text: "Real stories from Learnora students.", date: "Mar 18, 2024", read: "4 min read", img: img("guide3", 500, 260) },
+];
+
+const footerCols = [
+  { head: "Explore", links: ["Categories", "Courses", "Mentors", "Stories", "Learning Guides"] },
+  { head: "Company", links: ["About Us", "Careers", "Press", "Partners", "Blog"] },
+  { head: "Support", links: ["Help Center", "Terms & Conditions", "Privacy Policy", "Contact Us", "Community"] },
+];
+
+const Stars = ({ n = 5 }) => (
+  <span className="stars">
+    {Array.from({ length: n }).map((_, i) => <FaStar key={i} />)}
+  </span>
+);
 
 export default function Home() {
+  const [slide, setSlide] = useState(0);
+  const [email, setEmail] = useState("");
+  const [news, setNews] = useState("");
+
   useEffect(() => {
-    AOS.init({
-      duration: 900,
-      once: true,
-      offset: 80,
-      easing: "ease-out-cubic",
-    });
+    AOS.init({ duration: 800, once: true, offset: 60, easing: "ease-out-cubic" });
   }, []);
 
-
+  const total = 8;
+  const next = () => setSlide((s) => (s + 1) % total);
+  const prev = () => setSlide((s) => (s - 1 + total) % total);
 
   return (
-      <main className="commerce-home">
-          {/* HERO SECTION */}
+    <div className="learnora-page">
+      {/* NAVBAR */}
+      <header className="ln-nav" data-aos="fade-down">
+        <div className="ln-nav-top">
+          <a href="#home" className="ln-logo"><FaLeaf /> LEARNORA</a>
+          <div className="ln-search">
+            <FaSearch />
+            <input type="text" placeholder="Search courses" aria-label="Search courses" />
+          </div>
+          <button className="btn btn-dark">Sign In</button>
+        </div>
+        <nav className="ln-links">
+          {navLinks.map((l) => <a key={l} href={`#${l.toLowerCase()}`}>{l}</a>)}
+        </nav>
+      </header>
 
-          <h1 className="h1">YOUR FUTURE STARTS HERE</h1>
+      {/* HERO */}
+      <section className="ln-hero" id="home">
+        <div className="hero-left" data-aos="fade-right">
+          <h1>Learn New Skills<br />Build Your Future</h1>
+          <p className="hero-sub">Practical courses for career growth.</p>
+          <form className="hero-form" onSubmit={(e) => e.preventDefault()}>
+            <input
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <button type="submit" className="btn btn-dark">Start Free</button>
+          </form>
+          <small className="hero-note"><i /> No credit card required</small>
+        </div>
 
-          <h4 className="h4">Unlock Your Potential with  Learning</h4>
-          <h5 className="h5">Learn in-demand skills, build real-world projects, and take the next step toward your dream career — anytime, anywhere.</h5>
+        <div className="hero-right" data-aos="zoom-in" data-aos-delay="150">
+          <span className="scribble s-top">A Brighter<br />Day Ahead</span>
+          <span className="scribble s-mid">Better Skills<br />Brighter Tomorrow</span>
+          <img className="hero-girl" src={cars1} alt="Smiling student" />
+          <div className="float-card rating-card" data-aos="fade-left" data-aos-delay="400">
+            <span className="fc-icon yellow"><FaStar /></span>
+            <div><strong>4.9/5</strong><small>From 12K+ learner reviews</small></div>
+          </div>
+          <div className="float-card recommend-card" data-aos="fade-right" data-aos-delay="550">
+            <span className="fc-icon yellow"><FaUsers /></span>
+            <div><strong>98%</strong><small>Would recommend Learnora</small></div>
+          </div>
+        </div>
+      </section>
 
-          {/* COURSE SECTION */}
-          <section className="courses-section" id="courses">
-              <div className="section-heading" data-aos="fade-up">
-                  <span className="section-label">OUR PROGRAMS</span>
+      {/* STATS */}
+      <section className="ln-stats" data-aos="fade-up">
+        {stats.map((s) => (
+          <div className="stat" key={s.label}>
+            <span className="stat-icon">{s.icon}</span>
+            <div><strong>{s.num}</strong><small>{s.label}</small></div>
+          </div>
+        ))}
+      </section>
 
-                  <h2>
-                      Find Your <span>Learning Path</span>
-                  </h2>
-
-                  <p>
-                      Choose a course that matches your goals and start
-                      building useful skills for your future.
-                  </p>
-              </div><div className="course-grid">
-                      <article
-                          className="course-card course-blue"
-                          data-aos="fade-up"
-                      >
-                          <div className="course-top">
-                              <span className="course-number">01 / COURSE</span>
-                              <span className="course-icon">🎓</span>
-                          </div>
-
-                          <span className="course-category">DEGREE PROGRAM</span>
-                          <h3>B.Com</h3>
-
-                          <p>
-                              Build your foundation in commerce, business law,
-                              economics and financial accounting.
-                          </p>
-
-                          <div className="course-bottom">
-                              <span>◷ &nbsp; 3 Years</span>
-                              <a href="#benefits" aria-label="Learn about B.Com">↗</a>
-                          </div>
-                      </article>
-
-                      <article
-                          className="course-card course-purple"
-                          data-aos="fade-up"
-                          data-aos-delay="100"
-                      >
-                          <div className="course-top">
-                              <span className="course-number">02 / COURSE</span>
-                              <span className="course-icon">📚</span>
-                          </div>
-
-                          <span className="course-category">POSTGRADUATE</span>
-                          <h3>M.Com</h3>
-
-                          <p>
-                              Explore advanced finance, business management,
-                              taxation and accounting principles.
-                          </p>
-
-                          <div className="course-bottom">
-                              <span>◷ &nbsp; 2 Years</span>
-                              <a href="#benefits" aria-label="Learn about M.Com">↗</a>
-                          </div>
-                      </article>
-
-                      <article
-                          className="course-card course-orange"
-                          data-aos="fade-up"
-                          data-aos-delay="200"
-                      >
-                          <div className="course-top">
-                              <span className="course-number">03 / COURSE</span>
-                              <span className="course-icon">💻</span>
-                          </div>
-
-                          <span className="course-category">PRACTICAL TRAINING</span>
-                          <h3>Tally Prime</h3>
-
-                          <p>
-                              Learn ledger creation, voucher entries, inventory,
-                              GST and financial reporting.
-                          </p>
-
-                          <div className="course-bottom">
-                              <span>◷ &nbsp; 3 Months</span>
-                              <a href="#benefits" aria-label="Learn about Tally Prime">↗</a>
-                          </div>
-                      </article>
-
-                      <article
-                          className="course-card course-green"
-                          data-aos="fade-up"
-                      >
-                          <div className="course-top">
-                              <span className="course-number">04 / COURSE</span>
-                              <span className="course-icon">🧾</span>
-                          </div>
-
-                          <span className="course-category">TAX MANAGEMENT</span>
-                          <h3>GST & Taxation</h3>
-
-                          <p>
-                              Understand tax invoices, GST concepts, return filing
-                              and taxation fundamentals.
-                          </p>
-
-                          <div className="course-bottom">
-                              <span>◷ &nbsp; 2 Months</span>
-                              <a href="#benefits" aria-label="Learn about GST and Taxation">↗</a>
-                          </div>
-                      </article>
-
-                      <article
-                          className="course-card course-pink"
-                          data-aos="fade-up"
-                          data-aos-delay="100"
-                      >
-                          <div className="course-top">
-                              <span className="course-number">05 / COURSE</span>
-                              <span className="course-icon">🔍</span>
-                          </div>
-
-                          <span className="course-category">FINANCIAL CONTROL</span>
-                          <h3>Auditing</h3>
-
-                          <p>
-                              Discover audit procedures, internal controls,
-                              verification and audit reports.
-                          </p>
-
-                          <div className="course-bottom">
-                              <span>◷ &nbsp; 2 Months</span>
-                              <a href="#benefits" aria-label="Learn about Auditing">↗</a>
-                          </div>
-                      </article>
-
-                      <article
-                          className="course-card course-teal"
-                          data-aos="fade-up"
-                          data-aos-delay="200"
-                      >
-                          <div className="course-top">
-                              <span className="course-number">06 / COURSE</span>
-                              <span className="course-icon">📈</span>
-                          </div>
-
-                          <span className="course-category">FINANCIAL REPORTING</span>
-                          <h3>Balance Sheet</h3>
-
-                          <p>
-                              Understand assets, liabilities, capital, profit and
-                              loss, and financial statements.
-                          </p>
-
-                          <div className="course-bottom">
-                              <span>◷ &nbsp; 1 Month</span>
-                              <a href="#benefits" aria-label="Learn about Balance Sheet">↗</a>
-                          </div>
-                      </article>
-                  </div>
-          </section>
-
-          {/* BENEFITS SECTION */}
-          <section className="benefits-section" id="benefits">
-              <div className="benefits-heading" data-aos="fade-right">
-                  <span className="section-label">WHY LEARN WITH US?</span>
-
-                  <h2>
-                      Knowledge That
-                      <br />
-                      <span>Moves You Forward.</span>
-                  </h2>
-
-                  <p>
-                      Learn important concepts, practise what you learn
-                      and develop skills you can use in your career.
-                  </p>
+      {/* TRENDING COURSES */}
+      <section className="ln-section" id="courses">
+        <div className="sec-head" data-aos="fade-up">
+          <h2>Trending Courses</h2>
+          <p>Explore in-demand skills for tomorrow.</p>
+        </div>
+        <div className="course-grid">
+          {courses.map((c, i) => (
+            <article className="course-card" key={c.title} data-aos="fade-up" data-aos-delay={i * 100}>
+              <div className="course-img">
+                <img src={c.img} alt={c.title} />
+                {c.tag && <span className="badge">{c.tag}</span>}
               </div>
-
-              <div className="benefit-list">
-                  <div className="benefit-item" data-aos="fade-left">
-                      <div className="benefit-icon">✦</div>
-                      <div>
-                          <h3>Learn at Your Pace</h3>
-                          <p>Study concepts according to your schedule.</p>
-                      </div>
-                      <span className="benefit-arrow">↗</span>
-                  </div>
-
-                  <div
-                      className="benefit-item"
-                      data-aos="fade-left"
-                      data-aos-delay="100"
-                  >
-                      <div className="benefit-icon">▤</div>
-                      <div>
-                          <h3>Practical Knowledge</h3>
-                          <p>Explore accounting concepts and real-world examples.</p>
-                      </div>
-                      <span className="benefit-arrow">↗</span>
-                  </div>
-
-                  <div
-                      className="benefit-item"
-                      data-aos="fade-left"
-                      data-aos-delay="200"
-                  >
-                      <div className="benefit-icon">↗</div>
-                      <div>
-                          <h3>Career Development</h3>
-                          <p>Strengthen your skills for future opportunities.</p>
-                      </div>
-                      <span className="benefit-arrow">↗</span>
-                  </div>
+              <h3>{c.title}</h3>
+              <p>{c.desc}</p>
+              <div className="course-rating">
+                <b>{c.rating}</b> <Stars /> <small>({c.reviews})</small>
               </div>
-          </section>
+              <div className="course-price">
+                <strong>${c.price}.00</strong> <s>${c.old}.00</s>
+              </div>
+            </article>
+          ))}
+        </div>
+        <div className="center" data-aos="zoom-in">
+          <button className="btn btn-dark">Browse All <FaChevronRight /></button>
+        </div>
+      </section>
 
-          {/* FINAL CALL TO ACTION */}
-          <section className="final-cta" data-aos="zoom-in">
-              <div className="cta-decoration">✳</div>
+      {/* FEATURE STRIP */}
+      <section className="ln-features" data-aos="fade-up">
+        {features.map((f) => (
+          <div className="feature" key={f.title}>
+            <span className={`feature-icon ${f.color}`}>{f.icon}</span>
+            <div><strong>{f.title}</strong><small>{f.text}</small></div>
+          </div>
+        ))}
+      </section>
 
+      {/* CATEGORIES */}
+      <section className="ln-section" id="categories">
+        <div className="sec-head" data-aos="fade-up">
+          <h2>Top Categories</h2>
+          <p>Find the right path for you.</p>
+        </div>
+        <div className="cat-grid">
+          {categories.map((c, i) => (
+            <a href="#categories" className={`cat-card ${c.color}`} key={c.name} data-aos="flip-up" data-aos-delay={i * 100}>
+              <span className="cat-icon">{c.icon}</span>
+              <div><strong>{c.name}</strong><small>{c.text}</small></div>
+              <FaChevronRight className="cat-arrow" />
+            </a>
+          ))}
+        </div>
+      </section>
+
+      {/* MENTORS */}
+      <section className="ln-section" id="mentors">
+        <div className="sec-head" data-aos="fade-up">
+          <h2>Meet Your Mentors</h2>
+          <p>Learn from the best.</p>
+        </div>
+        <div className="mentor-grid">
+          {mentors.map((m, i) => (
+            <div className="mentor-card" key={m.name} data-aos="fade-up" data-aos-delay={i * 100}>
+              <div className={`mentor-photo ${m.bg}`}><img src={m.img} alt={m.name} /></div>
               <div>
-                  <span className="section-label">YOUR NEXT CHAPTER</span>
-
-                  <h2>
-                      Small Steps.
-                      <br />
-                      <span>Big Opportunities.</span>
-                  </h2>
-
-                  <p>
-                      Start learning today and take the next step toward
-                      your commerce career.
-                  </p>
+                <strong>{m.name}</strong>
+                <small>{m.role}</small>
+                <span className="mentor-rate"><b>{m.rating}</b> <FaStar /> <em>({m.count})</em></span>
               </div>
+            </div>
+          ))}
+        </div>
+      </section>
 
-              <a href="#courses" className="primary-btn cta-button">
-                  View All Courses <span>↗</span>
-              </a>
-          </section>
-
-      <section className="course-reviews">
-              <div className="reviews-heading" data-aos="fade-up">
-                  <span className="reviews-label">STUDENT FEEDBACK</span>
-
-                  <h2 className="h2">
-                      What Students Say About
-                      <span> Our Courses</span>
-                  </h2>
-
-                  <p>
-                      Honest feedback from learners about their commerce
-                      and accounting learning experiences.
-                  </p>
-
-                  <div className="reviews-rating">
-                      <strong>4.9</strong>
-                      <div>
-                          <div className="stars">★★★★★</div>
-                          <small>Student course reviews</small>
-                      </div>
-                  </div>
+      {/* STUDENT STORIES */}
+      <section className="ln-section" id="stories">
+        <div className="sec-head center-head" data-aos="fade-up">
+          <h2>Student Stories</h2>
+          <p>Real people. Real progress.</p>
+        </div>
+        <div className="story-grid">
+          {stories.map((s, i) => (
+            <div className={`story-card ${s.color}`} key={s.name} data-aos={i ? "fade-left" : "fade-right"}>
+              <img src={s.img} alt={s.name} />
+              <div>
+                <p>“{s.quote}”</p>
+                <div className="story-foot">
+                  <div><strong>{s.name}</strong><small>{s.role}</small></div>
+                  <Stars />
+                </div>
               </div>
+            </div>
+          ))}
+        </div>
+        <div className="pager" data-aos="fade-up">
+          <button onClick={prev} aria-label="Previous"><FaChevronLeft /></button>
+          <span>{slide + 1} of {total}</span>
+          <button onClick={next} aria-label="Next"><FaChevronRight /></button>
+        </div>
+      </section>
 
-              <div className="reviews-grid">
-                  <article className="review-card" data-aos="fade-up">
-                      <div className="review-top">
-                          <div className="review-avatar avatar-purple">A</div>
-                          <div>
-                              <h3>Arun Kumar</h3>
-                              <p>B.Com Student</p>
-                          </div>
-                          <span className="review-quote">“</span>
-                      </div>
+      {/* GUIDES */}
+      <section className="ln-section" id="guides">
+        <div className="sec-head" data-aos="fade-up">
+          <h2>Latest Learning Guides</h2>
+          <p>Tips, stories and insights.</p>
+        </div>
+        <div className="guide-grid">
+          {guides.map((g, i) => (
+            <article className="guide-card" key={g.title} data-aos="fade-up" data-aos-delay={i * 100}>
+              <img src={g.img} alt={g.title} />
+              <h3>{g.title}</h3>
+              <p>{g.text}</p>
+              <div className="guide-meta"><span>{g.date}</span><span>{g.read}</span></div>
+            </article>
+          ))}
+        </div>
+        <div className="center" data-aos="zoom-in">
+          <button className="btn btn-dark">Read More</button>
+        </div>
+      </section>
 
-                      <div className="review-stars">★★★★★</div>
+      {/* FOOTER */}
+      <footer className="ln-footer" id="contact">
+        <div className="footer-inner">
+          <div className="footer-brand" data-aos="fade-up">
+            <a href="#home" className="ln-logo"><FaLeaf /> LEARNORA</a>
+            <p>Learning today. A brighter tomorrow.</p>
+            <div className="socials">
+              {[FaFacebookF, FaInstagram, FaLinkedinIn, FaYoutube, FaPinterestP].map((Icon, i) => (
+                <a href="#home" key={i} aria-label="social link"><Icon /></a>
+              ))}
+            </div>
+          </div>
 
-                      <p className="review-text">
-                          The B.Com course helped me understand accounting,
-                          business concepts and economics more clearly.
-                          The lessons are easy to follow.
-                      </p>
+          {footerCols.map((col, i) => (
+            <div className="footer-col" key={col.head} data-aos="fade-up" data-aos-delay={(i + 1) * 100}>
+              <h4>{col.head}</h4>
+              {col.links.map((l) => <a href="#home" key={l}>{l}</a>)}
+            </div>
+          ))}
 
-                      <div className="review-course">
-                          <span>📘</span>
-                          <div>
-                              <small>COURSE REVIEW</small>
-                              <strong>B.Com</strong>
-                          </div>
-                      </div>
-                  </article>
+          <div className="footer-news" data-aos="fade-up" data-aos-delay="400">
+            <h4>Newsletter</h4>
+            <p>Get the latest courses, tips and stories.</p>
+            <input
+              type="email"
+              placeholder="Enter your email"
+              value={news}
+              onChange={(e) => setNews(e.target.value)}
+            />
+            <button className="btn btn-dark full">Subscribe</button>
+          </div>
 
-                  <article
-                      className="review-card review-featured"
-                      data-aos="fade-up"
-                      data-aos-delay="100"
-                  >
-                      <div className="review-top">
-                          <div className="review-avatar avatar-orange">P</div>
-                          <div>
-                              <h3>Priya S</h3>
-                              <p>Tally Prime Learner</p>
-                          </div>
-                          <span className="review-quote">“</span>
-                      </div>
-
-                      <div className="review-stars">★★★★★</div>
-
-                      <p className="review-text">
-                          Tally Prime training gave me a better understanding
-                          of ledger entries, vouchers and GST. Practical
-                          examples make the concepts easier to learn.
-                      </p>
-
-                      <div className="review-course">
-                          <span>💻</span>
-                          <div>
-                              <small>COURSE REVIEW</small>
-                              <strong>Tally Prime</strong>
-                          </div>
-                      </div>
-                  </article>
-
-                  <article
-                      className="review-card"
-                      data-aos="fade-up"
-                      data-aos-delay="200"
-                  >
-                      <div className="review-top">
-                          <div className="review-avatar avatar-green">K</div>
-                          <div>
-                              <h3>Karthik R</h3>
-                              <p>Taxation Learner</p>
-                          </div>
-                          <span className="review-quote">“</span>
-                      </div>
-
-                      <div className="review-stars">★★★★★</div>
-
-                      <p className="review-text">
-                          GST and Taxation lessons helped me understand
-                          tax invoices, GST basics and return filing.
-                          The course topics are clearly organised.
-                      </p>
-
-                      <div className="review-course">
-                          <span>🧾</span>
-                          <div>
-                              <small>COURSE REVIEW</small>
-                              <strong>GST & Taxation</strong>
-                          </div>
-                      </div>
-                  </article>
-
-                  <article
-                      className="review-card"
-                      data-aos="fade-up"
-                      data-aos-delay="100"
-                  >
-                      <div className="review-top">
-                          <div className="review-avatar avatar-pink">M</div>
-                          <div>
-                              <h3>Meena R</h3>
-                              <p>M.Com Student</p>
-                          </div>
-                          <span className="review-quote">“</span>
-                      </div>
-
-                      <div className="review-stars">★★★★★</div>
-
-                      <p className="review-text">
-                          The M.Com subjects help me revise advanced
-                          accounting, finance and business management
-                          concepts in a structured way.
-                      </p>
-
-                      <div className="review-course">
-                          <span>📚</span>
-                          <div>
-                              <small>COURSE REVIEW</small>
-                              <strong>M.Com</strong>
-                          </div>
-                      </div>
-                  </article>
-
-                  <article
-                      className="review-card"
-                      data-aos="fade-up"
-                      data-aos-delay="200"
-                  >
-                      <div className="review-top">
-                          <div className="review-avatar avatar-blue">S</div>
-                          <div>
-                              <h3>Santhosh M</h3>
-                              <p>Auditing Learner</p>
-                          </div>
-                          <span className="review-quote">“</span>
-                      </div>
-
-                      <div className="review-stars">★★★★★</div>
-
-                      <p className="review-text">
-                          I gained a better understanding of audit
-                          procedures, internal controls and financial
-                          verification through these lessons.
-                      </p>
-
-                      <div className="review-course">
-                          <span>🔍</span>
-                          <div>
-                              <small>COURSE REVIEW</small>
-                              <strong>Auditing</strong>
-                          </div>
-                      </div>
-                  </article>
-
-                  <article
-                      className="review-card"
-                      data-aos="fade-up"
-                      data-aos-delay="300"
-                  >
-                      <div className="review-top">
-                          <div className="review-avatar avatar-teal">D</div>
-                          <div>
-                              <h3>Divya P</h3>
-                              <p>Accounting Learner</p>
-                          </div>
-                          <span className="review-quote">“</span>
-                      </div>
-
-                      <div className="review-stars">★★★★★</div>
-
-                      <p className="review-text">
-                          The Balance Sheet lessons made assets,
-                          liabilities, capital and financial statements
-                          easier for me to understand.
-                      </p>
-
-                      <div className="review-course">
-                          <span>📈</span>
-                          <div>
-                              <small>COURSE REVIEW</small>
-                              <strong>Balance Sheet</strong>
-                          </div>
-                      </div>
-                  </article>
-              </div>
-
-              <div className="reviews-bottom" data-aos="fade-up">
-                  <span className="bottom-icon">✦</span>
-                  <p>
-                      Every new skill begins with one lesson.
-                      <strong> Keep learning, keep growing.</strong>
-                  </p>
-              </div>
-          </section>
-      </main>
+          <div className="footer-leaf" data-aos="zoom-in">
+            <FaLeaf />
+            <span className="scribble">Keep Learning<br />Keep Growing</span>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <small>© 2024 Learnora. All rights reserved.</small>
+          <small>A more skilled, kinder, brighter world.</small>
+        </div>
+      </footer>
+    </div>
   );
 }
